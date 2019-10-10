@@ -1,0 +1,37 @@
+%\logo{\includegraphics[height=1cm,width=3cm]{hamilton_mu.pdf}}
+\usepackage{pgf}
+\logo{\pgfputat{\pgfxy(0,8)}{\pgfbox[right,base]{\includegraphics[height=1cm]{hamilton_mu.pdf}}}}
+\newcommand{\nologo}{\setbeamertemplate{logo}{}}
+%\institute{Maynooth University}
+\setbeamertemplate{navigation symbols}{}
+
+% Set footer colours
+\definecolor{MU1}{rgb}{0.000,0.216,0.443}
+\definecolor{MU2}{rgb}{0.941,0.671,0.000}
+\definecolor{MU3}{rgb}{0.000,0.404,0.471}
+\definecolor{MU4}{rgb}{0.510,0.137,0.153}
+\setbeamercolor{author in head/foot}{fg=white, bg=MU1}
+\setbeamercolor{title in head/foot}{fg=white, bg=MU2}
+\setbeamercolor{date in head/foot}{fg=white, bg=MU3}
+\setbeamercolor{title}{fg=MU4}
+\setbeamercolor{frametitle}{fg=MU4}
+
+% Stretch the footer
+\makeatletter
+\defbeamertemplate*{footline}{Dan P theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\beamer@ifempty\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+\insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
