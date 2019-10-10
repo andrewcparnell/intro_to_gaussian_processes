@@ -261,8 +261,6 @@ ggplot(motor2, aes(x = times, y = accel)) +
   geom_line(data = GP_pred, aes(x = x_new, y = mu_pred))
 ```
 
-### Shiny app?
-
 ### What else can you do with GPs?
 
 - You can put the linear regression terms back in to the mean if you want
