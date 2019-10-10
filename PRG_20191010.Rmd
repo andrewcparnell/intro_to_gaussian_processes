@@ -243,10 +243,10 @@ theta = answer$p3
 x_new = pretty(motor2$times, n = 100)
 Sigma_new = with(motor2, 
              tau^2 * Exp.cov(times, x_new,
-                               theta = theta, p = 2)) #answer$p4 answer$p3
+                               theta = theta, p = 2))
 Sigma = with(motor2, 
              diag(sigma^2,nrow(motor2)) + tau^2 * Exp.cov(times, times,
-                               theta = theta, p = 2)) #answer$p3
+                               theta = theta, p = 2))
 GP_pred = tibble(
   x_new = x_new, 
   mu_pred = t(Sigma_new)%*%solve(Sigma)%*%motor2$accel
@@ -260,6 +260,14 @@ ggplot(motor2, aes(x = times, y = accel)) +
   geom_point() + 
   geom_line(data = GP_pred, aes(x = x_new, y = mu_pred))
 ```
+
+### Shiny app
+
+[andrewcparnell.shinyapps.io/GP_explore](https://andrewcparnell.shinyapps.io/GP_explore/)
+
+or
+
+[is.gd/gp_play](https://is.gd/gp_play)
 
 ### What else can you do with GPs?
 

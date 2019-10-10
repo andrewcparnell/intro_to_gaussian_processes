@@ -1,0 +1,12 @@
+name: GP_explore
+title: GP_explore
+username:
+account: andrewcparnell
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1312442
+bundleId: 2487682
+url: https://andrewcparnell.shinyapps.io/GP_explore/
+when: 1570716179.68916
+asMultiple: FALSE
+asStatic: FALSE
