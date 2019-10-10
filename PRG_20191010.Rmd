@@ -1,6 +1,7 @@
 ---
 title: "An introduction to Gaussian Processes "
-author: "Andrew C Parnell \\ [github.com/andrewcparnell/intro_to_gaussian_processes](https://github.com/andrewcparnell/intro_to_gaussian_processes)"
+author: "Andrew C Parnell"
+subtitle: "[github.com/andrewcparnell/intro_to_gaussian_processes](https://github.com/andrewcparnell/intro_to_gaussian_processes)"
 date: ""
 output:
   beamer_presentation: 
