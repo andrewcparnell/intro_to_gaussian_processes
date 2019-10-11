@@ -19,6 +19,7 @@ library(viridis)
 library(pander)
 theme_set(theme_bw()) + 
   theme(axis.title.y = element_text(angle = 0, vjust = 1, hjust=0))
+set.seed(100)
 ```
 
 ### Why learn about Gaussian Processes?
@@ -71,6 +72,7 @@ X = \left[ \begin{array}{cc} 1 & x_1 \\ 1 & x_2 \\ \vdots \\ 1 & x_n \end{array}
 \pause
 We can then write the model as:
 $$ \left[ \begin{array}{c} y_1 \\ y_2 \\ \vdots \\ y_n \end{array} \right] = \left[ \begin{array}{cc} 1 & x_1 \\ 1 & x_2 \\ \vdots \\ 1 & x_n \end{array} \right] \left[ \begin{array}{c} \beta_0 \\ \beta_1 \end{array} \right] + \left[ \begin{array}{c} \epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{array} \right]$$
+\pause
 or
 $$y = X \beta + \epsilon$$
 
@@ -105,7 +107,7 @@ where $\Sigma = \sigma^2 I$
 \pause
 This is the likelihood for a __multivariate normal distribution__ written $y \sim MVN(X\beta, \Sigma)$
 
-### Fitting linear regressions using the multivariate normal
+### Fitting LR using the multivariate normal
 
 Two different ways to write the log likelihood:
 ```{r}
@@ -139,17 +141,18 @@ The _key idea_ in Gaussian Processes is to change the off-diagonals of $\Sigma$ 
 
 ### Autocovariance functions
 
-The most common autocovariance function (ACF):
+The most common autocovariance function (ACF) is the squared exponential:
 $$\Sigma_{ij} = \tau^2 \exp \left[ - \frac{(x_i - x_j)^2}{\theta} \right]$$
 for $i\ne j$ with $\Sigma_{ii} = \tau^2 + \sigma^2$
+\pause
 
 This can be plotted:
 ```{r}
-sigma = 1; theta1 = 10; theta2 = 1
+tau = 1; theta1 = 10; theta2 = 1
 acv = tibble(
   distance = seq(0, 5, length = 100),
-  `theta=10` = sigma^2 * exp(-(distance ^ 2) / theta1),
-  `theta=1` = sigma^2 * exp(-(distance ^ 2) / theta2)
+  `theta=10` = tau^2 * exp(-(distance ^ 2) / theta1),
+  `theta=1` = tau^2 * exp(-(distance ^ 2) / theta2)
 ) 
 p = acv %>% 
   gather(key = Type, value = ACF, -distance) %>% 
@@ -157,7 +160,7 @@ p = acv %>%
   geom_line()
 ```
 
-### Pictures of squared exponential covariance function
+### The squared exponential covariance function
 ```{r}
 print(p)
 ```
@@ -218,7 +221,7 @@ nll = function(par) {
                tau^2 * Exp.cov(times, times,
                                theta = theta, p = 2))
   with(motor2, -dmvnorm(accel,
-                        cbind(1, times)%*%beta,
+                        rep(0,nrow(motor2)),
                         sigma = Sigma, log = TRUE))
 }
 nll(c(1,1,1))
@@ -230,7 +233,8 @@ nll(c(1,1,1))
 library(optimx)
 answer = optimx(par = c(1,1,1),
                 fn = nll,
-                method = 'BFGS')
+                lower = c(0.01,0.01,0.01),
+                method = 'L-BFGS-B')
 print(answer)
 ```
 
@@ -246,7 +250,8 @@ Sigma_new = with(motor2,
              tau^2 * Exp.cov(times, x_new,
                                theta = theta, p = 2))
 Sigma = with(motor2, 
-             diag(sigma^2,nrow(motor2)) + tau^2 * Exp.cov(times, times,
+             diag(sigma^2,nrow(motor2)) + 
+               tau^2 * Exp.cov(times, times,
                                theta = theta, p = 2))
 GP_pred = tibble(
   x_new = x_new, 
@@ -272,7 +277,7 @@ or
 
 ### What else can you do with GPs?
 
-- You can put the linear regression terms back in to the mean if you want
+- In these examples I have ignored the linear mean (set it to zero). You can put the mean terms back in to the mean if you want
 - If you drop the $\sigma^2$ off the diagonal you can perform interpolation rather than smoothing
 - The $x$ values don't have to be one dimensional. Provided you can create a univariate distance between them you can run a GP. This is the foundation for spatial statistics and Kriging
 - Lots of work on clever covariance functions
